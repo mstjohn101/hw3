@@ -3,17 +3,29 @@ let updateWidget = function(data) {
   console.log("Got weather data: ", data)
   // YOUR CODE GOES HERE
 
-  // HINT:
-  // Weather icons are provided for you. Sample URL: http://openweathermap.org/img/w/01d.png
-  // The very last part ('01d.png') should be obtained from the weather information.
+  let currentCity = $("#weather h4")
+  currentCity.html(data.name)
 
+  let currentTemperature = $("#weather p")
+  currentTemperature.html("It is " + (data.main.temp) + " degrees outside")
+
+  let replaceImage = $("#weather img")
+  $(replaceImage).attr('src', "http://openweathermap.org/img/w/" + data.weather[0].icon +".png")
 }
 
+let realLocation = function() {
+  event.preventDefault();
+  navigator.geolocation.getCurrentPosition(getWeather);
+}
 
-let getWeather = function(event) {
-  let latitude = '48.8566';
-  let longitude = '2.3522';
-  let apiKey = '4ce6f502d38ddae567bf1702b05e168c'; // REPLACE THIS VALUE with your own key.
+$("#get_forecast").on("click", realLocation);
+
+let getWeather = function(info) {
+
+  let latitude = info.coords.latitude
+  let longitude = info.coords.longitude
+
+  let apiKey = 'fad13ca22af87754cadeaf2ec94e01e9';
 
   let weatherServiceURL = 'https://api.openweathermap.org/data/2.5/weather?'
   weatherServiceURL += 'lat=' + latitude
